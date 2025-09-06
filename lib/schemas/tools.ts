@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
 
 // Zod schemas for tools
 export const GetPokemonInput = z.object({
@@ -17,12 +16,37 @@ export type TGetPokemonInput = z.infer<typeof GetPokemonInput>;
 export type TMoveRecommenderInput = z.infer<typeof MoveRecommenderInput>;
 
 // JSON Schemas for Anthropic tool registration
-export const GetPokemonJsonSchema = zodToJsonSchema(
-  GetPokemonInput,
-  "GetPokemonInput"
-) as Record<string, unknown>;
+// Must be plain objects with top-level type: 'object'
+export const GetPokemonJsonSchema = {
+  type: "object",
+  properties: {
+    pokemon: {
+      anyOf: [
+        { type: "string", minLength: 1 },
+        { type: "integer", minimum: 0 },
+      ],
+      description: "Name (string) or id (integer) of the Pokémon",
+    },
+    includeEvolution: {
+      type: "boolean",
+      description: "Include evolution chain data",
+    },
+  },
+  required: ["pokemon"],
+  additionalProperties: false,
+} as const as Record<string, unknown>;
 
-export const MoveRecommenderJsonSchema = zodToJsonSchema(
-  MoveRecommenderInput,
-  "MoveRecommenderInput"
-) as Record<string, unknown>;
+export const MoveRecommenderJsonSchema = {
+  type: "object",
+  properties: {
+    opponentTypes: {
+      type: "array",
+      items: { type: "string", minLength: 1 },
+      minItems: 1,
+      description: "Defending types, e.g., ['fire','flying']",
+    },
+    topK: { type: "integer", minimum: 1, maximum: 10, description: "Top-N types to return" },
+  },
+  required: ["opponentTypes"],
+  additionalProperties: false,
+} as const as Record<string, unknown>;
