@@ -58,18 +58,8 @@ export function createChatSSEStream({ messages, tools, system, signal }: CreateS
         .filter((m) => m.role === "user" || m.role === "assistant")
         .map((m) => ({ role: m.role as "user" | "assistant", content: m.content }));
 
-      // Heuristic tool choice to encourage tool use
-      function chooseTool(): any | undefined {
-        const lastUser = [...messages].reverse().find((m) => m.role === "user")?.content?.toLowerCase?.() || "";
-        const wantsAdvice = /(best types|versus|\bvs\.?\b|weak against|resist|effective against|super\s*effective)/.test(lastUser);
-        const wantsPokemon = /(\bpok[eé]mon\b|\bstats?\b|\babilities\b|\bevolution\b|\bsprite\b|\bpokedex\b|\bshow me\b|\bwhat is\b|\bwho is\b)/.test(lastUser);
-        
-        // Check for move effectiveness first
-        if (wantsAdvice) return { type: "tool", name: "advice_move_recommender" };
-        if (wantsPokemon) return { type: "tool", name: "pokeapi_get_pokemon" };
-        return { type: "any" };
-      }
-      const tool_choice = chooseTool();
+      // Allow AI to choose when to use tools for more natural conversation flow
+      const tool_choice = { type: "auto" } as const;
 
       if (process.env.DEBUG) {
         console.log(`[anthropic ${reqId}] Creating stream with:`, {
