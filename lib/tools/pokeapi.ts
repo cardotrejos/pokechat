@@ -112,7 +112,7 @@ export async function getPokemonNormalized(input: TGetPokemonInput): Promise<Nor
 
 export function createPokeTools(): ToolSpec[] {
   const getPokemonSpec: ToolSpec = {
-    name: "pokeapi.getPokemon",
+    name: "pokeapi_get_pokemon",
     description: "Fetch normalized Pokémon data by name or id with optional evolution chain",
     jsonSchema: GetPokemonJsonSchema,
     async execute(input: unknown): Promise<ToolResult> {

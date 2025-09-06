@@ -29,7 +29,7 @@ function computeMultipliers(opponentTypes: string[], typeChart: TypeChart) {
 
 export function createMoveRecommenderTool(): ToolSpec {
   return {
-    name: "advice.moveRecommender",
+    name: "advice_move_recommender",
     description: "Recommend best attacking types vs given opponent types using the Pokémon type chart.",
     jsonSchema: MoveRecommenderJsonSchema,
     async execute(input: unknown): Promise<ToolResult> {
