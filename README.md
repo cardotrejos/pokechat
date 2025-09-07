@@ -4,12 +4,30 @@ A real-time streaming AI assistant that combines Claude AI with Pokémon data to
 
 ## Features
 
-- 🔄 **Real-time Streaming**: Server-Sent Events (SSE) for live AI responses
-- 🛠️ **Smart Tools**: PokéAPI integration with type effectiveness calculator
-- 📊 **Rich Data Cards**: Interactive Pokémon stats and type matchup visualizations
-- 🎨 **Pokédex UI**: Authentic Pokédex-inspired interface design
-- ⚡ **Performance**: Smart caching with LRU + TTL for optimal response times
-- 🔒 **Type Safety**: End-to-end TypeScript with Zod validation
+- **Real-time Streaming**: Server-Sent Events (SSE) for live AI responses
+- **Smart Tools**: PokéAPI integration with type effectiveness calculator
+- **Rich Data Cards**: Interactive Pokémon stats and type matchup visualizations
+- **Pokédex UI**: Authentic Pokédex-inspired interface design
+- **Performance**: Smart caching with LRU + TTL for optimal response times
+- **Type Safety**: End-to-end TypeScript with Zod validation
+
+## Screenshots
+
+<p align="center">
+  <img src="./screenshots/chat.png" alt="PokéChat conversation UI" width="720" />
+</p>
+
+<p align="center">
+  <img src="./screenshots/evolution.png" alt="Pokémon card with evolution chain" width="720" />
+</p>
+
+<p align="center">
+  <img src="./screenshots/type-effectiveness.png" alt="Type effectiveness analysis card" width="720" />
+</p>
+
+Notes:
+- Place PNG files at `./screenshots/chat.png`, `./screenshots/evolution.png`, and `./screenshots/type-effectiveness.png`.
+- Filenames and paths are relative so the images render on GitHub and other viewers.
 
 ## Quick Start
 
