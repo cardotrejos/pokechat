@@ -14,6 +14,7 @@ interface PokemonData {
     spe: number;
   };
   sprite: string | null;
+  evolutionChain?: Array<{ name: string; evolvesTo: string[] }>;
 }
 
 interface PokemonCardProps {
@@ -65,6 +66,19 @@ function StatBar({ label, value, max = 255 }: { label: string; value: number; ma
 
 export default function PokemonCard({ data }: PokemonCardProps) {
   const totalStats = Object.values(data.baseStats).reduce((a, b) => a + b, 0);
+  
+  // Build a simple evolution rendering model from the chain data, if present
+  // We detect root species (not present in any evolvesTo arrays) and then show
+  // one level of arrows for clarity. For branched chains (e.g. Eevee), we show
+  // all immediate evolutions.
+  const evolutionDisplay = (() => {
+    if (!data.evolutionChain || data.evolutionChain.length === 0) return null;
+    const nodes = data.evolutionChain;
+    const allChildren = new Set<string>();
+    for (const n of nodes) for (const c of n.evolvesTo) allChildren.add(c);
+    const roots = nodes.filter(n => !allChildren.has(n.name));
+    return { roots, nodes };
+  })();
   
   return (
     <div className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg overflow-hidden border border-gray-200 max-w-md">
@@ -138,6 +152,35 @@ export default function PokemonCard({ data }: PokemonCardProps) {
           <StatBar label="SP.DEF" value={data.baseStats.spd} />
           <StatBar label="SPEED" value={data.baseStats.spe} />
         </div>
+
+        {/* Evolution Chain (optional) */}
+        {evolutionDisplay && (
+          <div className="mt-4">
+            <div className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">Evolution Chain</div>
+            <div className="space-y-2">
+              {evolutionDisplay.roots.map((root) => (
+                <div key={root.name} className="flex items-center flex-wrap gap-2 text-xs">
+                  <span className="px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 font-medium capitalize">
+                    {root.name}
+                  </span>
+                  {root.evolvesTo.length > 0 && (
+                    <>
+                      <span className="text-gray-400">→</span>
+                      {root.evolvesTo.map((child) => (
+                        <span key={child} className="px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200 font-medium capitalize">
+                          {child}
+                        </span>
+                      ))}
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="mt-1 text-[10px] text-gray-400">
+              Showing immediate evolutions. Some species may have multiple branches.
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

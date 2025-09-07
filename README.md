@@ -118,7 +118,9 @@ Calculates optimal attacking types against opponent types.
 
 ### Running Tests
 ```bash
-bun test
+bun run test
+# or
+npx vitest
 ```
 
 ### Type Checking

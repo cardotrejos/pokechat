@@ -56,6 +56,33 @@ describe('Move Recommender Tool', () => {
     }
   })
 
+  it('sorts by multiplier then type name for ties', async () => {
+    const result = await tool.execute({ opponentTypes: ['normal'], topK: 5 })
+    expect(result.ok).toBe(true)
+    if (result.data && Array.isArray(result.data)) {
+      // Against normal, super-effective types are fighting (2x); immunities not present
+      // After that, many 1x types should be ordered alphabetically by type name
+      const names = (result.data as any[]).map(r => r.type)
+      expect(names[0]).toBe('fighting')
+      // Confirm alphabetical order among 1x entries (subset check)
+      const ones = (result.data as any[]).filter(r => r.multiplier === 1).map(r => r.type)
+      const sorted = [...ones].sort((a,b) => a.localeCompare(b))
+      expect(ones).toEqual(sorted)
+    }
+  })
+
+  it('provides rationale text aligned with multiplier', async () => {
+    const result = await tool.execute({ opponentTypes: ['rock', 'ice'], topK: 5 })
+    expect(result.ok).toBe(true)
+    if (result.data && Array.isArray(result.data)) {
+      // Fighting should be 4x vs rock+ice -> should say super-effective
+      const fighting = (result.data as any[]).find(r => r.type === 'fighting')
+      expect(fighting).toBeDefined()
+      expect(fighting!.multiplier).toBeGreaterThanOrEqual(2)
+      expect(String(fighting!.rationale).toLowerCase()).toContain('super-effective')
+    }
+  })
+
   it('should handle invalid input gracefully', async () => {
     const result = await tool.execute({
       opponentTypes: [], // Invalid: empty array

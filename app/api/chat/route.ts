@@ -21,6 +21,7 @@ export async function POST(req: Request) {
       "",
       "CRITICAL TOOL USAGE:",
       "- For any Pokémon facts (types, stats, abilities, evolutions, sprites), ALWAYS call the 'pokeapi_get_pokemon' tool and ground your answer in its returned data. Do not rely on memory.",
+      "- If the user asks about evolution, evolution lines, what a Pokémon evolves into/from, or an 'evolution chain', set includeEvolution: true in the pokeapi_get_pokemon tool input.",
       "- For type matchup advice, ALWAYS call 'advice_move_recommender' with the opponent types.",
       "",
       "RESPONSE STYLE:",

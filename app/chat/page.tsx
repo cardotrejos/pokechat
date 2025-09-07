@@ -294,7 +294,7 @@ export default function ChatPage() {
             }}
           >
             <input
-              className="flex-1 rounded-md border border-red-200 px-3 py-2 placeholder:text-red-300 focus:outline-none focus:ring-2 focus:ring-red-400"
+              className="flex-1 rounded-md border border-red-200 px-3 py-2 bg-white text-slate-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-red-400"
               placeholder="Ask about Pokémon stats, types, abilities, or type matchups..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
